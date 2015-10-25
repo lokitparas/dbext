@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from sheets.views import signin,signup
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-]
+    url(r'^signin/$',signin),
+    url(r'^signup/$',signup),
+]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

@@ -1,0 +1,130 @@
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
+#
+# Also note: You'll have to insert the output of 'django-admin.py sqlcustom [app_label]'
+# into your database.
+from __future__ import unicode_literals
+
+from django.db import models
+
+
+class Cell(models.Model):
+    cell_id = models.IntegerField(primary_key=True)
+    cell_x = models.IntegerField()
+    cell_y = models.IntegerField()
+    cell_color = models.CharField(max_length=20, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'cell'
+
+
+class ContainedIn(models.Model):
+    doc = models.ForeignKey('Documents')
+    sheet = models.ForeignKey('Sheets')
+
+    class Meta:
+        managed = False
+        db_table = 'contained_in'
+
+
+class DataObject(models.Model):
+    data_id = models.IntegerField(primary_key=True)
+    data_size = models.IntegerField(blank=True, null=True)
+    data_type = models.CharField(max_length=20, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'data_object'
+
+class Documents(models.Model):
+    doc_id = models.IntegerField(primary_key=True)
+    doc_name = models.CharField(max_length=20)
+    created_on = models.DateTimeField(blank=True, null=True)
+    created_by = models.ForeignKey('Users', db_column='created_by', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'documents'
+
+class Has(models.Model):
+    data = models.ForeignKey(DataObject)
+    cell = models.ForeignKey(Cell)
+
+    class Meta:
+        managed = False
+        db_table = 'has'
+
+
+class Image(models.Model):
+    data = models.ForeignKey(DataObject, primary_key=True)
+    image_data = models.TextField(blank=True)  # This field type is a guess.
+    image_title = models.CharField(max_length=20, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'image'
+
+class IsIn(models.Model):
+    sheet = models.ForeignKey('Sheets')
+    cell = models.ForeignKey(Cell)
+
+    class Meta:
+        managed = False
+        db_table = 'is_in'
+
+class Ownership(models.Model):
+    username = models.ForeignKey('Users', db_column='username')
+    doc = models.ForeignKey(Documents)
+    rights = models.CharField(max_length=20, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'ownership'
+
+class Sheets(models.Model):
+    sheet_id = models.IntegerField(primary_key=True)
+    sheet_name = models.CharField(max_length=20)
+    total_columns = models.IntegerField(blank=True, null=True)
+    total_rows = models.IntegerField(blank=True, null=True)
+    sheet_last_modified = models.DateTimeField(blank=True, null=True)
+    sheet_created_on = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'sheets'
+
+class Text(models.Model):
+    data = models.ForeignKey(DataObject, primary_key=True)
+    text_data = models.CharField(max_length=1000, blank=True)
+    text_font = models.CharField(max_length=20, blank=True)
+    font_size = models.IntegerField(blank=True, null=True)
+    text_color = models.CharField(max_length=20, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'text'
+
+class Users(models.Model):
+    username = models.CharField(primary_key=True, max_length=20)
+    password = models.ForeignKey('Teams', db_column='password', blank=True, null=True)
+    name = models.CharField(max_length=50)
+    email_id = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'users'
+
+
+class Video(models.Model):
+    data = models.ForeignKey(DataObject, primary_key=True)
+    video_data = models.TextField(blank=True)  # This field type is a guess.
+    video_title = models.CharField(max_length=20, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'video'
